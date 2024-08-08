@@ -10,12 +10,12 @@ class ZipCodeService{
     public function findOrCreateZipCode(string $zipCodeCreate){
         $zipCode = ZipCode::where('cep', $zipCodeCreate)->first();
         if(!$zipCode){
-            $zipCode = $this->createZipCode($zipCodeCreate);
+            $zipCode = $this->storeZipCodeDatabase($zipCodeCreate);
         }
         return $zipCode;
     }
 
-    public function createZipCode(string $zipCode){
+    public function storeZipCodeDatabase(string $zipCode){
         $brasilApi = BrasilApi::getCep($zipCode);
         $zipCode = ZipCode::create([
             'cep' => $brasilApi['cep'],
