@@ -1,36 +1,48 @@
 import { PageProps } from "@/types";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { Icon } from "leaflet";
 import { MapContainer, Marker, Polyline, Popup, TileLayer } from "react-leaflet";
 
 interface Coordinates {
-    latitude: any;
-    longitude: any;
+    latitude: string
+    longitude: string
 }
-
-interface Distance {
-    id: number;
-    from: string;
-    to: string;
-    distance: number;
-    coordinates: {
-        [key: string]: Coordinates;
-    }[];
+interface ZipCode {
+    cep: string;
+    state: string;
+    city: string;
+    neighborhood: string | null;
+    street: string | null;
+    coordinates: Coordinates;
     created_at: string;
     updated_at: string;
+}
+interface Distance {
+    from_id: string;
+    to_id: string;
+    distance: number;
+    created_at: string;
+    updated_at: string;
+    cep: string;
+    state: string;
+    city: string;
+    neighborhood: string | null;
+    street: string | null;
+    coordinates: string;
+    from_zip_code: ZipCode;
+    to_zip_code: ZipCode;
 }
 
 export default function Show({
     auth,
     distances,
 }: PageProps<{ distances: Distance }>) {
-    const fromCoordinate = distances.coordinates.filter(
-        (c) => c[distances.from]
-    )[0][distances.from];
+    console.log(distances.to_zip_code.coordinates);
+    //@ts-ignore
+    const fromCoordinate = distances.from_zip_code.coordinates;
+    //@ts-ignore
+    const toCoordinate = distances.to_zip_code.coordinates;
 
-    const toCoordinate = distances.coordinates.filter(
-        (c) => c[distances.to]
-    )[0][distances.to];
 
     const centerLatitude = (parseFloat(fromCoordinate.latitude) + parseFloat(toCoordinate.latitude)) / 2;
     const centerLongitude = (parseFloat(fromCoordinate.longitude) + parseFloat(toCoordinate.longitude)) / 2;
@@ -42,15 +54,23 @@ export default function Show({
         popupAnchor : [-3, -76]
     })
 
-    var zoom = 15;
-    if(distances.distance > 100) {
-        zoom = 7;
-    }else if(distances.distance > 50) {
-        zoom = 9;
-    }else if(distances.distance > 20) {
-        zoom = 11;
-    }else if(distances.distance > 10) {
-        zoom = 13;
+    const zoomLevels = [
+        { distance: 2, zoom: 13 },
+        { distance: 5, zoom: 12 },
+        { distance: 10, zoom: 11 },
+        { distance: 30, zoom: 10 },
+        { distance: 60, zoom: 9.5 },
+        { distance: 80, zoom: 8.5 },
+        { distance: 100, zoom: 7 },
+        { distance: 500, zoom: 6 },
+    ];
+
+    let zoom = 3; // Default zoom level
+    for (const level of zoomLevels) {
+        if (distances.distance < level.distance) {
+            zoom = level.zoom;
+            break;
+        }
     }
 
     return (
@@ -58,53 +78,57 @@ export default function Show({
             <Head title="Distância" />
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    A distância entre o cep {distances.from} e {distances.to} é
-                    de {Math.round(distances.distance)} km.
-                    {JSON.stringify(distances.coordinates[0].latitude)}
-                    <MapContainer
-                        attributionControl={false}
-                        center={[
-                            centerLatitude,
-                            centerLongitude,
-                        ]}
-                        zoom={zoom}
-                        scrollWheelZoom={true}
-                        className="w-full h-96"
-                    >
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <Marker
-                            position={[
-                                fromCoordinate.latitude,
-                                fromCoordinate.longitude,
+                    <div className="flex flex-col p-4 bg-white rounded-lg gap-3">
+                        <h3 className="text-lg">
+                        A distância entre {distances.from_zip_code.city} ({distances.from_zip_code.cep}) e {distances.to_zip_code.cep} ({distances.to_zip_code.cep}) é
+                        de {distances.distance.toFixed(2)} km.
+                        </h3>
+                        <MapContainer
+                            attributionControl={false}
+                            center={[
+                                centerLatitude,
+                                centerLongitude,
                             ]}
+                            zoom={zoom}
+                            scrollWheelZoom={true}
+                            className="w-full h-96"
                         >
-                            <Popup>{distances.from}</Popup>
-                        </Marker>
-                        <Marker
-                            // icon={iconPin}
-                            position={[
-                                toCoordinate.latitude,
-                                toCoordinate.longitude,
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker
+                                position={[
+                                    Number(fromCoordinate.latitude),
+                                    Number(fromCoordinate.longitude),
+                                ]}
+                            >
+                                <Popup>{distances.from_zip_code.city} ({distances.from_zip_code.cep})</Popup>
+                            </Marker>
+                            <Marker
+                                // icon={iconPin}
+                                position={[
+                                    Number(toCoordinate.latitude),
+                                    Number(toCoordinate.longitude),
+                                ]}
+                            >
+                                <Popup>{distances.to_zip_code.city} ({distances.to_zip_code.cep})</Popup>
+                            </Marker>
+                            <Polyline
+                            positions={[
+                                [
+                                    Number(fromCoordinate.latitude),
+                                    Number(fromCoordinate.longitude),
+                                ],
+                                [
+                                    Number(toCoordinate.latitude),
+                                    Number(toCoordinate.longitude),
+                                ],
                             ]}
-                        >
-                            <Popup>{distances.to}</Popup>
-                        </Marker>
-                        <Polyline
-                        positions={[
-                            [
-                                fromCoordinate.latitude,
-                                fromCoordinate.longitude,
-                            ],
-                            [
-                                toCoordinate.latitude,
-                                toCoordinate.longitude,
-                            ],
-                        ]}
-                        />
-                    </MapContainer>
+                            />
+                        </MapContainer>
+                        <Link href="/" className="bg-gray-500 text-white font-bold p-4 rounded-lg text-center" >Nova Busca</Link>
+                    </div>
                 </div>
             </div>
         </div>

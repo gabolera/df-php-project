@@ -11,27 +11,37 @@ class ZipCodeDistance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'from',
-        'to',
+        'from_id',
+        'to_id',
         'distance',
-        'coordinates',
     ];
 
     protected $casts = [
         'distance' => 'float',
-        'coordinates' => 'array',
     ];
+
+    public function fromZipCode()
+    {
+        return $this->belongsTo(ZipCode::class, 'from_id', 'cep');
+    }
+
+    public function toZipCode()
+    {
+        return $this->belongsTo(ZipCode::class, 'to_id', 'cep');
+    }
 
     public function scopeFindDistance(Builder $query, string $zipCodeFrom, string $zipCodeTo): Builder
     {
         return $query
+            ->join('zip_codes as zcf', 'zcf.cep', '=', 'zip_code_distances.from_id')
+            ->join('zip_codes as zct', 'zct.cep', '=', 'zip_code_distances.to_id')
             ->where(function ($query) use ($zipCodeFrom, $zipCodeTo) {
-                $query->where('from', $zipCodeFrom)
-                      ->where('to', $zipCodeTo);
+                $query->where('zcf.cep', $zipCodeFrom)
+                      ->where('zct.cep', $zipCodeTo);
             })
             ->orWhere(function ($query) use ($zipCodeFrom, $zipCodeTo) {
-                $query->where('from', $zipCodeTo)
-                      ->where('to', $zipCodeFrom);
+                $query->where('zcf.cep', $zipCodeTo)
+                      ->where('zct.cep', $zipCodeFrom);
             });
     }
 }

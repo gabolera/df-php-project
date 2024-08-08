@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('zip_code_distances', function (Blueprint $table) {
-            $table->id();
-            $table->string('from', 8);
-            $table->string('to', 8);
+            $table->string('from_id');
+            $table->foreign('from_id')->references('cep')->on('zip_codes');
+            $table->string('to_id');
+            $table->foreign('to_id')->references('cep')->on('zip_codes');
             $table->decimal('distance', 11, 3);
-            $table->json('coordinates')->nullable();
             $table->timestamps();
-            $table->unique(['from', 'to']);
-            $table->index(['from', 'to']);
-            $table->index(['to', 'from']);
+            $table->unique(['from_id', 'to_id']);
+            $table->index(['from_id', 'to_id']);
+            $table->index(['to_id', 'from_id']);
         });
     }
 

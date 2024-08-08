@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Error;
 use Illuminate\Support\Facades\Http;
 
 class BrasilApi
@@ -11,8 +12,29 @@ class BrasilApi
     {
         $res = Http::get(self::BASE_URL . $cep);
         if($res->clientError()){
-            return [];
+            throw new Error('CEP not found');
         }
-        return $res->json();
+
+        $res = $res->json();
+
+        if(empty($res['cep'])){
+            throw new Error('CEP not found');
+        }
+
+        $response = [
+            'cep' => $res['cep'],
+            'state' => $res['state'],
+            'city' => $res['city'],
+            'neighborhood' => $res['neighborhood'],
+            'street' => $res['street'],
+        ];
+
+        if(!empty($res['location']['coordinates']['latitude']) && !empty($res['location']['coordinates']['longitude'])){
+            $response['coordinates'] = [
+                'latitude' => $res['location']['coordinates']['latitude'],
+                'longitude' => $res['location']['coordinates']['longitude'],
+            ];
+        }
+        return $response;
     }
 }
