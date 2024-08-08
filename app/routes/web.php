@@ -13,7 +13,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -26,8 +26,8 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/zipcode-distance', [ZipCodeDistanceController::class, 'index']);
-Route::get('/{ceps}', [ZipCodeDistanceController::class, 'show'])->name('zipcode.show');
-Route::post('/zipcode-distance', [ZipCodeDistanceController::class, 'store'])->name('zipcode.store');
+Route::get('/zip', [ZipCodeDistanceController::class, 'index']);
+Route::get('/zip/{ceps}', [ZipCodeDistanceController::class, 'show'])->name('zipcode.show');
+Route::post('/zip', [ZipCodeDistanceController::class, 'store'])->name('zipcode.store');
 
 require __DIR__.'/auth.php';
