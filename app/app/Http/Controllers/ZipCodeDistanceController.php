@@ -89,6 +89,6 @@ class ZipCodeDistanceController extends Controller
         $zipCodeDistance->coordinates = $coordinates;
         $zipCodeDistance->save();
 
-        return response()->json($zipCodeDistance);
+        return redirect()->route('zipcode.show', ['ceps' => $zipCodeFrom . '-' . $zipCodeTo]);
     }
 }
