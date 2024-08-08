@@ -37,12 +37,8 @@ export default function Show({
     auth,
     distances,
 }: PageProps<{ distances: Distance }>) {
-    console.log(distances.to_zip_code.coordinates);
-    //@ts-ignore
     const fromCoordinate = distances.from_zip_code.coordinates;
-    //@ts-ignore
     const toCoordinate = distances.to_zip_code.coordinates;
-
 
     const centerLatitude = (parseFloat(fromCoordinate.latitude) + parseFloat(toCoordinate.latitude)) / 2;
     const centerLongitude = (parseFloat(fromCoordinate.longitude) + parseFloat(toCoordinate.longitude)) / 2;
