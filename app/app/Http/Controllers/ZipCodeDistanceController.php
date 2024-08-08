@@ -6,6 +6,7 @@ use App\Models\ZipCodeDistance;
 use App\Services\BrasilApi;
 use App\Services\CalculateDistanceByCoordinates;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ZipCodeDistanceController extends Controller
 {
@@ -22,7 +23,13 @@ class ZipCodeDistanceController extends Controller
         $distance = ZipCodeDistance::findDistance($ceps[0], $ceps[1])
             ->first();
 
-        return response()->json($distance);
+        if (!$distance) {
+            return redirect('/');
+        }
+
+        return Inertia::render('ZipCode/Show', [
+            'distances' => $distance,
+        ]);
     }
 
     public function store(Request $request)
@@ -38,7 +45,7 @@ class ZipCodeDistanceController extends Controller
             ->first();
 
         if ($exists) {
-            return response()->json($exists);
+            return redirect()->route('zipcode.show', ['ceps' => $zipCodeFrom . '-' . $zipCodeTo]);
         }
 
         // O From sempre será menor que o To para salvar no banco

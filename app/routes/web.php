@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/zipcode-distance', [ZipCodeDistanceController::class, 'index']);
-Route::get('/zipcode-distance/{ceps}', [ZipCodeDistanceController::class, 'show']);
-Route::post('/zipcode-distance', [ZipCodeDistanceController::class, 'store']);
+Route::get('/{ceps}', [ZipCodeDistanceController::class, 'show'])->name('zipcode.show');
+Route::post('/zipcode-distance', [ZipCodeDistanceController::class, 'store'])->name('zipcode.store');
 
 require __DIR__.'/auth.php';
