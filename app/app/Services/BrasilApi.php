@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Error;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
 
 class BrasilApi
 {
@@ -12,13 +13,13 @@ class BrasilApi
     {
         $res = Http::get(self::BASE_URL . $cep);
         if($res->clientError()){
-            throw new Error('CEP not found');
+            throw ValidationException::withMessages(['CEP not found']);
         }
 
         $res = $res->json();
 
         if(empty($res['cep'])){
-            throw new Error('CEP not found');
+            throw ValidationException::withMessages(['CEP not found']);
         }
 
         $response = [

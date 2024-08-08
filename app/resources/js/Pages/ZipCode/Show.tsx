@@ -1,3 +1,4 @@
+import { Button } from "@/Components/ui/button";
 import { PageProps } from "@/types";
 import { Head, Link } from "@inertiajs/react";
 import { Icon } from "leaflet";
@@ -87,7 +88,7 @@ export default function Show({
                             ]}
                             zoom={zoom}
                             scrollWheelZoom={true}
-                            className="w-full h-96"
+                            className="w-full min-h-[70vh]"
                         >
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -123,7 +124,9 @@ export default function Show({
                             ]}
                             />
                         </MapContainer>
-                        <Link href="/" className="bg-gray-500 text-white font-bold p-4 rounded-lg text-center" >Nova Busca</Link>
+                        <Link href={route('home')} className="flex flex-col w-full">
+                            <Button>Realizar nova busca</Button>
+                        </Link>
                     </div>
                 </div>
             </div>
