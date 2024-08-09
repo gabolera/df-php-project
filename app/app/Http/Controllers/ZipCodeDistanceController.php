@@ -68,8 +68,8 @@ class ZipCodeDistanceController extends Controller
         );
 
         $zipCodeDistance = new ZipCodeDistance();
-        $zipCodeDistance->from_id = $zipCodeFrom->cep;
-        $zipCodeDistance->to_id = $zipCodeTo->cep;
+        $zipCodeDistance->from_id = $zipCodeFrom->id;
+        $zipCodeDistance->to_id = $zipCodeTo->id;
         $zipCodeDistance->distance = $distance;
         $zipCodeDistance->save();
 

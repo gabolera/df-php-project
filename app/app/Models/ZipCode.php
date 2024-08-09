@@ -21,5 +21,4 @@ class ZipCode extends Model
     protected $casts = [
         'coordinates' => 'array',
     ];
-
 }

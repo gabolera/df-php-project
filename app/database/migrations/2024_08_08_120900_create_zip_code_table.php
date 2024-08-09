@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('zip_codes', function (Blueprint $table) {
-            $table->string('cep', 8)->unique()->primary();
+            $table->id();
+            $table->string('cep', 8)->unique();
             $table->string('state', 2);
             $table->string('city');
             $table->string('neighborhood')->nullable();

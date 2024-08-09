@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zip_code_distances', function (Blueprint $table) {
-            $table->string('from_id');
-            $table->foreign('from_id')->references('cep')->on('zip_codes');
-            $table->string('to_id');
-            $table->foreign('to_id')->references('cep')->on('zip_codes');
+        Schema::create('zip_code_distance', function (Blueprint $table) {
+            $table->bigInteger('from_id');
+            $table->foreign('from_id')->references('id')->on('zip_codes');
+            $table->bigInteger('to_id');
+            $table->foreign('to_id')->references('id')->on('zip_codes');
             $table->decimal('distance', 11, 3);
             $table->timestamps();
             $table->unique(['from_id', 'to_id']);
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('zip_code_distances');
+        Schema::dropIfExists('zip_code_distance');
     }
 };

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ZipCodeDistance extends Model
+class ZipCodeDistance extends Pivot
 {
     use HasFactory;
 
@@ -17,31 +17,31 @@ class ZipCodeDistance extends Model
     ];
 
     protected $casts = [
-        'distance' => 'float',
+        'distance' => 'float'
     ];
 
     public function fromZipCode()
     {
-        return $this->belongsTo(ZipCode::class, 'from_id', 'cep');
+        return $this->belongsTo(ZipCode::class, 'from_id', 'id');
     }
 
     public function toZipCode()
     {
-        return $this->belongsTo(ZipCode::class, 'to_id', 'cep');
+        return $this->belongsTo(ZipCode::class, 'to_id', 'id');
     }
 
     public function scopeFindDistance(Builder $query, string $zipCodeFrom, string $zipCodeTo): Builder
     {
         return $query
-            ->join('zip_codes as zcf', 'zcf.cep', '=', 'zip_code_distances.from_id')
-            ->join('zip_codes as zct', 'zct.cep', '=', 'zip_code_distances.to_id')
+            ->join('zip_codes as zcf', 'zcf.id', '=', 'zip_code_distance.from_id')
+            ->join('zip_codes as zct', 'zct.id', '=', 'zip_code_distance.to_id')
             ->where(function ($query) use ($zipCodeFrom, $zipCodeTo) {
-                $query->where('zcf.cep', $zipCodeFrom)
-                      ->where('zct.cep', $zipCodeTo);
+                $query->where('zcf.cep', '=', $zipCodeFrom)
+                    ->where('zct.cep', '=', $zipCodeTo);
             })
             ->orWhere(function ($query) use ($zipCodeFrom, $zipCodeTo) {
-                $query->where('zcf.cep', $zipCodeTo)
-                      ->where('zct.cep', $zipCodeFrom);
+                $query->where('zcf.cep', '=', $zipCodeTo)
+                    ->where('zct.cep', '=', $zipCodeFrom);
             });
     }
 }
