@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Error;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
