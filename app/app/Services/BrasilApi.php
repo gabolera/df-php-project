@@ -11,14 +11,14 @@ class BrasilApi
     public static function getCep(string $cep): array
     {
         $res = Http::get(self::BASE_URL . $cep);
-        if($res->clientError()){
-            throw ValidationException::withMessages(['CEP not found']);
+        if ($res->clientError()) {
+            throw ValidationException::withMessages(['CEP ' . $cep . ' inválido']);
         }
 
         $res = $res->json();
 
-        if(empty($res['cep'])){
-            throw ValidationException::withMessages(['CEP not found']);
+        if (empty($res['cep'])) {
+            throw ValidationException::withMessages(['CEP ' . $cep . ' inválido']);
         }
 
         $response = [
@@ -29,7 +29,7 @@ class BrasilApi
             'street' => $res['street'],
         ];
 
-        if(!empty($res['location']['coordinates']['latitude']) && !empty($res['location']['coordinates']['longitude'])){
+        if (!empty($res['location']['coordinates']['latitude']) && !empty($res['location']['coordinates']['longitude'])) {
             $response['coordinates'] = [
                 'latitude' => $res['location']['coordinates']['latitude'],
                 'longitude' => $res['location']['coordinates']['longitude'],

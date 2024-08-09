@@ -6,6 +6,7 @@ use App\Models\ZipCodeDistance;
 use App\Services\CalculateDistanceByCoordinates;
 use App\Services\ZipCodeService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class ZipCodeDistanceController extends Controller
@@ -39,11 +40,11 @@ class ZipCodeDistanceController extends Controller
         $zipCodeTo = preg_replace('/\D/', '', $request->input('to'));
 
         if (strlen($zipCodeFrom) !== 8 || strlen($zipCodeTo) !== 8) {
-            return response()->json(['message' => 'CEP inválido'], 400);
+            throw ValidationException::withMessages(['CEP inválido']);
         }
 
         if ($zipCodeFrom === $zipCodeTo) {
-            return response()->json(['message' => 'CEP de origem e destino não podem ser iguais'], 400);
+            throw ValidationException::withMessages(['CEP de origem e destino não podem ser iguais']);
         }
 
         // Verificar se já não existe essa distância no banco
@@ -59,7 +60,11 @@ class ZipCodeDistanceController extends Controller
         $zipCodeTo = $zipCodeService->findOrCreateZipCode($zipCodeTo);
 
         if (empty($zipCodeFrom['coordinates']) || empty($zipCodeTo['coordinates'])) {
-            return response()->json(['message' => 'Coordenadas não encontras para realizar o cálculo de distância'], 404);
+            $cepNo = empty($zipCodeFrom['coordinates']) ? $zipCodeFrom['cep'] : $zipCodeTo['cep'];
+            $cepNo .= !empty($cepNo) && empty($zipCodeTo['cep']) ? ' e ' . $zipCodeTo['cep'] : '';
+            throw ValidationException::withMessages([
+                'Coordenadas geográficas não encontras para estes CEPs ' . $cepNo ?? ''
+            ]);
         }
 
         $distance = CalculateDistanceByCoordinates::calculate(
