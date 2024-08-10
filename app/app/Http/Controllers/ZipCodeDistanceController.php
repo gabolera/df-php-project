@@ -80,4 +80,13 @@ class ZipCodeDistanceController extends Controller
 
         return redirect()->route('zipcode.show', ['ceps' => $zipCodeFrom->cep . '-' . $zipCodeTo->cep]);
     }
+
+    public function list()
+    {
+        $zipCodeDistance = ZipCodeDistance::with('fromZipCode', 'toZipCode')->get();
+
+        return Inertia::render('ZipCode/List', [
+            'zipCodeDistances' => $zipCodeDistance,
+        ]);
+    }
 }

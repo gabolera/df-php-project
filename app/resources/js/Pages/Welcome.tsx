@@ -92,6 +92,33 @@ export default function Welcome({ auth }: PageProps) {
                                 Calcular
                             </Button>
                         </form>
+                        <div className="flex w-full p-4 items-center justify-center">
+                            <Link
+                                href={"/login"}
+                                className="text-blue-500 hover:underline"
+                            >
+                                <Button
+                                    type="button"
+                                    className=""
+                                    variant={"link"}
+                                >
+                                    Entrar
+                                </Button>
+                            </Link>
+                            ou
+                            <Link
+                                href={"/register"}
+                                className="text-blue-500 hover:underline"
+                            >
+                                <Button
+                                    type="button"
+                                    className=""
+                                    variant={"link"}
+                                >
+                                    Cadastre-se
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
