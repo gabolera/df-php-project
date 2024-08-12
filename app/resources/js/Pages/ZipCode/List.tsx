@@ -68,10 +68,10 @@ export default function Dashboard({
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
                                                     <td>
-                                                        {`${distance.from_zip_code.city} (${distance.from_zip_code.cep})`}
+                                                        {`${distance.from_zip_code.city}, ${distance.from_zip_code.state} (${distance.from_zip_code.cep})`}
                                                     </td>
                                                     <td>
-                                                        {`${distance.to_zip_code.city} (${distance.to_zip_code.cep})`}
+                                                        {`${distance.to_zip_code.city}, ${distance.to_zip_code.state} (${distance.to_zip_code.cep})`}
                                                     </td>
                                                     <td>
                                                         {distance.distance} km
