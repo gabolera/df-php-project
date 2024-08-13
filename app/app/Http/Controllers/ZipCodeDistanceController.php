@@ -36,10 +36,10 @@ class ZipCodeDistanceController extends Controller
 
     public function store(Request $request)
     {
-        $zipCodeFrom = preg_replace('/\D/', '', $request->input('from'));
-        $zipCodeTo = preg_replace('/\D/', '', $request->input('to'));
+        $zipCodeFrom = ZipCodeService::formatZipCode($request->input('from'));
+        $zipCodeTo = ZipCodeService::formatZipCode($request->input('to'));
 
-        if (strlen($zipCodeFrom) !== 8 || strlen($zipCodeTo) !== 8) {
+        if (ZipCodeService::isValidZipCode($zipCodeFrom) || ZipCodeService::isValidZipCode($zipCodeTo)) {
             throw ValidationException::withMessages(['CEP inválido']);
         }
 

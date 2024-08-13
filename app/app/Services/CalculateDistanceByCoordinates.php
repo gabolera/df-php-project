@@ -9,11 +9,6 @@ namespace App\Services;
 
 class CalculateDistanceByCoordinates
 {
-    public function __construct(string $var = null)
-    {
-        // $this->var = $var;
-    }
-
     public static function calculate(array $coords1, array $coords2): float
     {
         $latFrom = deg2rad($coords1['latitude']);

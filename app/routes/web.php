@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BatchFileController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ZipCodeDistanceController;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/zip-codes', [ZipCodeDistanceController::class, 'list'])->name('zipcode.list');
+    Route::get('/batch', [BatchFileController::class, 'index'])->name('batch.index');
+    Route::post('/batch', [BatchFileController::class, 'import'])->name('batch.import');
 });
 
 

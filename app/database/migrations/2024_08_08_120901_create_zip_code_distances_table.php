@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('zip_code_distance', function (Blueprint $table) {
+            $table->id()->primary();
             $table->bigInteger('from_id');
             $table->foreign('from_id')->references('id')->on('zip_codes');
             $table->bigInteger('to_id');

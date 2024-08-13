@@ -5,17 +5,20 @@ namespace App\Services;
 use App\Models\ZipCode;
 use App\Services\BrasilApi;
 
-class ZipCodeService{
+class ZipCodeService
+{
 
-    public function findOrCreateZipCode(string $zipCodeCreate){
+    public function findOrCreateZipCode(string $zipCodeCreate)
+    {
         $zipCode = ZipCode::where('cep', $zipCodeCreate)->first();
-        if(!$zipCode){
+        if (!$zipCode) {
             $zipCode = $this->storeZipCodeDatabase($zipCodeCreate);
         }
         return $zipCode;
     }
 
-    public function storeZipCodeDatabase(string $zipCode){
+    public function storeZipCodeDatabase(string $zipCode)
+    {
         $brasilApi = BrasilApi::getCep($zipCode);
         $zipCode = ZipCode::create([
             'cep' => $brasilApi['cep'],
@@ -26,5 +29,15 @@ class ZipCodeService{
             'coordinates' => $brasilApi['coordinates'] ?? null,
         ]);
         return $zipCode;
+    }
+
+    public static function isValidZipCode(string $zipCode)
+    {
+        return strlen(self::formatZipCode($zipCode)) === 8;
+    }
+
+    public static function formatZipCode(string $zipCode)
+    {
+        return preg_replace('/\D/', '', $zipCode);
     }
 }
