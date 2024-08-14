@@ -39,7 +39,7 @@ services:
       - app-network
 
   worker:
-    container_name: df-worker
+    # container_name: df-worker
     build:
       context: ./worker-importer
       dockerfile: Dockerfile
@@ -48,9 +48,11 @@ services:
       - amqp
     networks:
       - app-network
+    deploy:
+      replicas: 1
 
   nginx:
-    image: nginx:alpine
+    build: ./docker/nginx/build
     container_name: df-nginx
     restart: unless-stopped
     tty: true
@@ -60,6 +62,16 @@ services:
     volumes:
       - ./app:/app
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+    
+  elk:
+    image: sebp/elk
+    container_name: df-elk
+    ports:
+      - 5601:5601
+      - 9200:9200
+      - 5044:5044
     networks:
       - app-network
 
