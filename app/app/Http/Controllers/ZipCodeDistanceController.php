@@ -39,7 +39,7 @@ class ZipCodeDistanceController extends Controller
         $zipCodeFrom = ZipCodeService::formatZipCode($request->input('from'));
         $zipCodeTo = ZipCodeService::formatZipCode($request->input('to'));
 
-        if (ZipCodeService::isValidZipCode($zipCodeFrom) || ZipCodeService::isValidZipCode($zipCodeTo)) {
+        if (!ZipCodeService::isValidZipCode($zipCodeFrom) || !ZipCodeService::isValidZipCode($zipCodeTo)) {
             throw ValidationException::withMessages(['CEP inválido']);
         }
 

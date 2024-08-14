@@ -26,8 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/zip-codes', [ZipCodeDistanceController::class, 'list'])->name('zipcode.list');
-    Route::get('/batch', [BatchFileController::class, 'index'])->name('batch.index');
-    Route::post('/batch', [BatchFileController::class, 'import'])->name('batch.import');
+    Route::get('/batch-file', [BatchFileController::class, 'index'])->name('batch.index');
+    Route::post('/batch-file', [BatchFileController::class, 'import'])->name('batch.import');
 });
 
 
