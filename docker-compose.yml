@@ -22,6 +22,46 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - app-network
+
+  php:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: df-app
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./app:/app
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  worker:
+    container_name: df-worker
+    build:
+      context: ./worker-importer
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - amqp
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: df-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/app
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
 
 networks:
   app-network:

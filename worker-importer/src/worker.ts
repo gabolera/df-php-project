@@ -83,7 +83,7 @@ async function calculateJob(
 
 async function run() {
   const rabbitmq = await amqp.connect({
-    hostname: "localhost",
+    hostname: "amqp",
     port: 5672,
     username: "rabbitmq",
     password: "rabbitmq",
