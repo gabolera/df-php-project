@@ -25,19 +25,6 @@ services:
     networks:
       - app-network
 
-  php:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    container_name: df-app
-    restart: unless-stopped
-    tty: true
-    volumes:
-      - ./app:/var/www
-      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - app-network
-
   worker:
     # container_name: df-worker
     build:
@@ -50,6 +37,23 @@ services:
       - app-network
     deploy:
       replicas: 1
+
+  php:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: df-app
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+      - amqp
+    networks:
+      - app-network
 
   nginx:
     build: ./docker/nginx/build

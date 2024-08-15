@@ -1,10 +1,12 @@
 #!/bin/sh
 
-cd /app
+cd /var/www
 
-composer install
 php artisan key:generate
 php artisan migrate
 npm install
 npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 php-fpm

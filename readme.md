@@ -3,10 +3,10 @@
 
 ## 📦 Instalação
 
-Primeiramente configure o arquivo `.env` com as informações do seu banco de dados. OU renomeie o `.env-development` de exemplo para `.env` e configure as informações do banco de dados.
+Primeiramente configure o arquivo `.env` com as informações do seu banco de dados. OU renomeie o `.env.example` de exemplo para `.env` e configure as informações do banco de dados.
 
 ```bash 
-
+docker compose up -d --build
 ```
 
 ## 🛠️ Configuração
