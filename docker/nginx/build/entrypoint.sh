@@ -10,6 +10,7 @@
 # wait_elk
 
 /docker-entrypoint.sh
+chmod go-w /etc/filebeat/modules.d/nginx.yml
 filebeat modules enable nginx
 filebeat setup
 service filebeat start

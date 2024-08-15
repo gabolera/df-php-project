@@ -62,9 +62,13 @@ services:
     volumes:
       - ./app:/app
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./docker/nginx/build/nginx.yml:/etc/filebeat/modules.d/nginx.yml
     networks:
       - app-network
-    
+    depends_on:
+      - elk
+      - php
+
   elk:
     image: sebp/elk
     container_name: df-elk
