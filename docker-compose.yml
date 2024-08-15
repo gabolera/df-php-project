@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     tty: true
     volumes:
-      - ./app:/app
+      - ./app:/var/www
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
@@ -60,9 +60,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./app:/app
+      - ./app:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
-      - ./docker/nginx/build/nginx.yml:/etc/filebeat/modules.d/nginx.yml
     networks:
       - app-network
     depends_on:

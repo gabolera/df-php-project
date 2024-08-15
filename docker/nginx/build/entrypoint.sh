@@ -10,8 +10,13 @@
 # wait_elk
 
 /docker-entrypoint.sh
-chmod go-w /etc/filebeat/modules.d/nginx.yml
 filebeat modules enable nginx
+metricbeat modules enable nginx
+
 filebeat setup
+metricbeat setup
+
 service filebeat start
+service metricbeat start
+
 nginx -g "daemon off;"
