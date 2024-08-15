@@ -24,9 +24,23 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY . /var/www
-COPY docker-files/artisan /var/www/artisan
-COPY docker-files/index.php /var/www/public/index.php
+COPY docker/artisan /var/www/artisan
+COPY docker/index.php /var/www/public/index.php
 RUN COMPOSER_VENDOR_DIR="/var/vendor" composer install
+RUN chmod -R 777 /var/www/storage
+
+
+# RUN apt-get -y update && apt-get -y install build-essential autoconf libcurl4-openssl-dev --no-install-recommends
+# RUN mkdir -p /home/apm-agent && \
+#     cd /home/apm-agent && \
+#     git clone https://github.com/elastic/apm-agent-php.git apm && \
+#     cd apm/src/ext && \
+#     /usr/local/bin/phpize && ./configure --enable-elastic_apm && \
+#     make clean && make && make install
+# COPY ./docker/elastic_apm.ini /usr/local/etc/php/conf.d/elastic_apm.ini
+# RUN mkdir /app
+
+
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -92,7 +92,7 @@ async function run() {
 
   const channel = await rabbitmq.createChannel();
   await channel.assertQueue("batch_file", { durable: true });
-  await channel.prefetch(3);
+  await channel.prefetch(15);
 
   channel.consume("batch_file", async (message) => {
     if (!message) {

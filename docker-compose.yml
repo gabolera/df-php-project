@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
     tty: true
     volumes:
-      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./app/docker/php.ini:/usr/local/etc/php/conf.d/local.ini
     ports:
       - "9000:9000"
     depends_on:
@@ -69,18 +69,28 @@ services:
     networks:
       - app-network
     depends_on:
-      - elk
+      # - elk
       - php
 
-  elk:
-    image: sebp/elk
-    container_name: df-elk
-    ports:
-      - 5601:5601
-      - 9200:9200
-      - 5044:5044
-    networks:
-      - app-network
+  # elk:
+  #   image: sebp/elk
+  #   container_name: df-elk
+  #   ports:
+  #     - 5601:5601
+  #     - 9200:9200
+  #     - 5044:5044
+  #   networks:
+  #     - app-network
+  
+  # apm-server:
+  #   image: docker.elastic.co/apm/apm-server:8.15.0
+  #   container_name: df-apm
+  #   volumes:
+  #     - ./docker/apm/apm-server.yml:/usr/share/apm-server/apm-server.yml
+  #   ports:
+  #     - 8200:8200
+  #   networks:
+  #     - app-network
 
 networks:
   app-network:
