@@ -2,7 +2,7 @@ import axios from "axios";
 import { ZipCodeProps } from "../entities/ZipCode";
 
 export class BrasilApi {
-  async getCep(cep: string): Promise<ZipCodeProps> {
+  async getCep(cep: string): Promise<Omit<ZipCodeProps, 'id'>> {
     const data = await axios.request({
       method: "GET",
       url: `https://brasilapi.com.br/api/cep/v2/${cep}`,

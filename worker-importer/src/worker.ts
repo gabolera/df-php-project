@@ -14,8 +14,8 @@ async function updateBatchItem({
   batch_file_id: number;
   cepFrom: string;
   cepTo: string;
-  idCepCalculated?: number;
-  status?: any;
+  idCepCalculated?: string;
+  status: any;
   error_message?: string;
 }) {
   const batchFile = new BatchFileRepository();
@@ -45,6 +45,7 @@ async function calculateJob(
       cepFrom,
       cepTo,
       idCepCalculated: exists,
+      status: BatchFileItemStatusEnum.Processed,
     });
     return;
   }
@@ -52,19 +53,17 @@ async function calculateJob(
   const zipCodeFrom = await zipCodeService.findOrCreateZipCode(cepFrom);
   const zipCodeTo = await zipCodeService.findOrCreateZipCode(cepTo);
 
-  if (
-    !zipCodeFrom.coordinates ||
-    !zipCodeTo.coordinates ||
-    !zipCodeFrom.id ||
-    !zipCodeTo.id
-  ) {
-    return;
+  if (!zipCodeFrom?.id || !zipCodeTo?.id) {
+    throw new Error("CEP não encontrado");
   }
 
-  const distance = zipCodeService.calculateDistanceByCoordinates(
-    zipCodeFrom.coordinates,
-    zipCodeTo.coordinates
-  );
+  var distance;
+  if (zipCodeFrom.coordinates && zipCodeTo.coordinates) {
+    distance = zipCodeService.calculateDistanceByCoordinates(
+      zipCodeFrom.coordinates,
+      zipCodeTo.coordinates
+    );
+  }
 
   const idCepCalculated = await zipCodeDistance.create({
     zipCodeFrom: zipCodeFrom.id,
@@ -92,7 +91,7 @@ async function run() {
 
   const channel = await rabbitmq.createChannel();
   await channel.assertQueue("batch_file", { durable: true });
-  await channel.prefetch(15);
+  await channel.prefetch(10);
 
   channel.consume("batch_file", async (message) => {
     if (!message) {
@@ -110,7 +109,7 @@ async function run() {
         cepFrom: zip_code_from,
         cepTo: zip_code_to,
         status: BatchFileItemStatusEnum.Failed,
-        error_message: err.message,
+        error_message: err.message.substring(0, 1000),
       });
     }
     channel.ack(message);

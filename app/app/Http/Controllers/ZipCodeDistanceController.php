@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\RateLimit;
+use App\Helpers\SanitizeData;
 use App\Models\ZipCodeDistance;
 use App\Services\CalculateDistanceByCoordinates;
 use App\Services\ZipCodeService;
@@ -19,6 +21,7 @@ class ZipCodeDistanceController extends Controller
 
     public function show($ceps)
     {
+        RateLimit::check('zipcode', 5, 15);
         $ceps = explode('-', $ceps);
 
         $distance = ZipCodeDistance::findDistance($ceps[0], $ceps[1])
@@ -36,6 +39,8 @@ class ZipCodeDistanceController extends Controller
 
     public function store(Request $request)
     {
+        RateLimit::check('zipcode', 5, 15);
+
         $zipCodeFrom = ZipCodeService::formatZipCode($request->input('from'));
         $zipCodeTo = ZipCodeService::formatZipCode($request->input('to'));
 
@@ -86,7 +91,7 @@ class ZipCodeDistanceController extends Controller
         $zipCodeDistance = ZipCodeDistance::with('fromZipCode', 'toZipCode')->get();
 
         return Inertia::render('ZipCode/List', [
-            'zipCodeDistances' => $zipCodeDistance,
+            'zipCodeDistances' => SanitizeData::sanitize($zipCodeDistance->toArray()),
         ]);
     }
 }

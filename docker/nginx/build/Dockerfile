@@ -17,6 +17,6 @@ RUN rm -f /var/log/nginx/access.log && rm -f /var/log/nginx/error.log
 
 COPY entrypoint.sh /entrypoint.sh
 
-RUN chmod +x entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]

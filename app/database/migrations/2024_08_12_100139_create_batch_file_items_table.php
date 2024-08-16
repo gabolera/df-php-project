@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('zip_code_from');
             $table->string('zip_code_to');
             $table->integer('status')->default(BatchFileItemStatusEnum::Pending->value);
-            $table->string('error_message')->nullable();
+            $table->longText('error_message')->nullable();
             $table->bigInteger('zip_code_distance_id')->unsigned()->nullable()->comment('Distance calculated reference id');
             $table->foreign('zip_code_distance_id')->references('id')->on('zip_code_distance');
             $table->timestamps();
