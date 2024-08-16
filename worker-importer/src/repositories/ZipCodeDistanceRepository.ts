@@ -1,11 +1,12 @@
 import db from "../database/KnexDriverDatabase";
 import { ZipCode } from "../entities/ZipCode";
+import { randomUUID } from 'crypto';
 
 export class ZipCodeDistanceRepository {
   async hasCalculatedDistance(
     zipCodeFrom: string,
     zipCodeTo: string
-  ): Promise<number | undefined> {
+  ): Promise<string | undefined> {
     const zip = await db.raw(
       `
       SELECT dis.id
@@ -33,15 +34,18 @@ export class ZipCodeDistanceRepository {
     zipCodeTo,
     distance,
   }: {
-    zipCodeFrom: number;
-    zipCodeTo: number;
-    distance: number;
-  }): Promise<number> {
+    zipCodeFrom: string;
+    zipCodeTo: string;
+    distance?: number;
+  }): Promise<string> {
     const res = await db("zip_code_distance")
       .insert({
+        // id: randomUUID(),
         from_id: zipCodeFrom,
         to_id: zipCodeTo,
         distance,
+        created_at: db.fn.now(),
+        updated_at: db.fn.now(),
       })
       .returning("id");
     return res[0].id;

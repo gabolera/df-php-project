@@ -4,7 +4,7 @@ export interface Coordinates {
 }
 
 export interface ZipCodeProps {
-  id?: number;
+  id?: string;
   cep: string;
   state: string;
   city: string;

@@ -14,7 +14,7 @@ export class BatchFileRepository {
     zip_code_from: string;
     zip_code_to: string;
     status: string;
-    zip_code_distance_id?: number;
+    zip_code_distance_id?: string;
     error_message?: string;
   }): Promise<void> {
     const zip = await db("batch_file_items")
