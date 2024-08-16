@@ -18,15 +18,17 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/zip-codes', [ZipCodeDistanceController::class, 'list'])->name('zipcode.list');
-    Route::get('/batch-file', [BatchFileController::class, 'index'])->name('batch.index');
+    Route::get('/zipcodes', [ZipCodeDistanceController::class, 'list'])->name('zipcode.list');
+    Route::get('/batches', [BatchFileController::class, 'list'])->name('batch.index');
+    Route::get('/batches/{id}', [BatchFileController::class, 'show'])->name('batch.show');
+    Route::get('/batch-file', [BatchFileController::class, 'create'])->name('batch.create');
     Route::post('/batch-file', [BatchFileController::class, 'import'])->name('batch.import');
 });
 

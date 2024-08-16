@@ -21,19 +21,22 @@ export default function Dashboard({ auth }: PageProps) {
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100 gap-3 flex flex-col">
                             <div className="flex flex-row gap-3 justify-between">
+                                Calcule agora
+                                <div className="">
+
                                 <Link
                                     href={route("zipcode.list")}
-                                    className="text-blue-500 hover:underline"
                                 >
-                                    <Button>
+                                    <Button variant={"link"}>
                                         Ver lista de calculos de distâncias
                                     </Button>
                                 </Link>
-                                <Link href={"#"}>
-                                    <Button variant={"outline"}>
+                                <Link href={route('batch.index')}>
+                                    <Button variant={"link"}>
                                         Importar dados em massa
                                     </Button>
                                 </Link>
+                                </div>
                             </div>
                             <div className="flex w-full">
                                 <div className="flex mx-auto m-8">

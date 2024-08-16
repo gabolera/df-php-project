@@ -57,9 +57,8 @@ export default function Show({
         { distance: 10, zoom: 11 },
         { distance: 30, zoom: 10 },
         { distance: 60, zoom: 9.5 },
-        { distance: 80, zoom: 8.5 },
-        { distance: 100, zoom: 7 },
-        { distance: 500, zoom: 6 },
+        { distance: 100, zoom: 8.5 },
+        { distance: 700, zoom: 7 },
     ];
 
     let zoom = 3; // Default zoom level
@@ -112,6 +111,7 @@ export default function Show({
                                 <Popup>{distances.to_zip_code.city} ({distances.to_zip_code.cep})</Popup>
                             </Marker>
                             <Polyline
+                            // pathOptions={{ color: '#ffcc00' }}
                             positions={[
                                 [
                                     Number(fromCoordinate.latitude),
@@ -124,9 +124,9 @@ export default function Show({
                             ]}
                             />
                         </MapContainer>
-                        <Link href={route('home')} className="flex flex-col w-full">
+                        <div className="flex flex-col w-full" onClick={() => window.history.back()}>
                             <Button>Realizar nova busca</Button>
-                        </Link>
+                        </div>
                     </div>
                 </div>
             </div>

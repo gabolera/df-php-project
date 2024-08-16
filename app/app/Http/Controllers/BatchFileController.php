@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BatchFileStatusEnum;
+use App\Helpers\SanitizeData;
 use App\Models\BatchFile;
 use App\Models\BatchFileItem;
 use App\Services\ZipCodeService;
@@ -35,7 +36,7 @@ class BatchFileController extends Controller
         $this->channel->queue_declare('batch_file', false, true, false, false);
     }
 
-    public function index()
+    public function create()
     {
         return Inertia::render('BatchFile/Index');
     }
@@ -100,6 +101,33 @@ class BatchFileController extends Controller
         $this->channel->close();
         $this->amqp->close();
 
-        return response()->json(['message' => 'Arquivo importado com sucesso', 'errors' => $errors]);
+        return redirect()->route('batch.show', ['id' => $batchId]);
     }
+
+    public function list()
+    {
+        $batches = BatchFile::where('user_id', Auth::id())
+            ->with('items')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('BatchFile/List', [
+            'batches' => $batches,
+        ]);
+    }
+
+    public function show($id)
+    {
+        $batch = BatchFile::where('user_id', Auth::id())
+            ->with('items')
+            ->with('items.zipCodeDistance')
+            ->find($id);
+
+        $sanitizedBatch = SanitizeData::sanitize($batch->toArray());
+
+        return Inertia::render('BatchFile/Show', [
+            'batch' => $sanitizedBatch,
+        ]);
+    }
+
 }

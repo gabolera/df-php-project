@@ -55,41 +55,59 @@ export default function List({
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-50 dark:bg-gray-700">
                                         <tr>
-                                            <th></th>
-                                            <th>CEP Origem</th>
-                                            <th>CEP Destino</th>
-                                            <th>Distância</th>
-                                            <th></th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                CEP Origem
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                CEP Destino
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Distância
+                                            </th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200">
                                         {zipCodeDistances.map(
                                             (distance, index) => (
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>
+                                                <tr
+                                                    key={index}
+                                                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                >
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                        {index + 1}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                                         {`${distance.from_zip_code.city}, ${distance.from_zip_code.state} (${distance.from_zip_code.cep})`}
                                                     </td>
-                                                    <td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                                                         {`${distance.to_zip_code.city}, ${distance.to_zip_code.state} (${distance.to_zip_code.cep})`}
                                                     </td>
-                                                    <td>
-                                                        {distance.distance} km
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                                        {distance.distance
+                                                            ? distance.distance +
+                                                              "km"
+                                                            : "-"}
                                                     </td>
-                                                    <td>
-                                                        <Link
-                                                            href={route(
-                                                                "zipcode.show",
-                                                                `${distance.from_zip_code.cep}-${distance.to_zip_code.cep}`
-                                                            )}
-                                                        >
-                                                            <Button
-                                                                className="text-blue-500 hover:underline"
-                                                                variant={"link"}
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                        {distance.distance && (
+                                                            <Link
+                                                                href={route(
+                                                                    "zipcode.show",
+                                                                    `${distance.from_zip_code.cep}-${distance.to_zip_code.cep}`
+                                                                )}
                                                             >
-                                                                Ver no mapa
-                                                            </Button>
-                                                        </Link>
+                                                                <Button
+                                                                    className="text-blue-500 hover:underline"
+                                                                    variant={
+                                                                        "link"
+                                                                    }
+                                                                >
+                                                                    Ver no mapa
+                                                                </Button>
+                                                            </Link>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             )
