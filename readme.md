@@ -9,6 +9,8 @@ Primeiramente configure o arquivo `.env` com as informações do seu banco de da
 docker compose -f docker-compose-build.yml up --build && docker compose up -d --build
 ```
 
+Basta acessar [http://localhost](http://localhost) para visualizar a aplicação.
+
 
 ## 🛠️ Configuração (Opcional)
 
