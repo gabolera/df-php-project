@@ -6,6 +6,9 @@
 Primeiramente configure o arquivo `.env` com as informações do seu banco de dados. OU renomeie o `.env.example` de exemplo para `.env` e configure as informações do banco de dados.
 
 ```bash 
+cd app/
+npm install
+npm run build
 docker compose up -d --build
 ```
 

@@ -39,9 +39,7 @@ services:
       replicas: 1
 
   php:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
+    build: ./app
     container_name: df-app
     restart: unless-stopped
     tty: true
@@ -69,7 +67,6 @@ services:
     networks:
       - app-network
     depends_on:
-      # - elk
       - php
 
   # elk:
