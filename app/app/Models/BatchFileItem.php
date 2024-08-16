@@ -14,10 +14,16 @@ class BatchFileItem extends Model
         'zip_code_from',
         'zip_code_to',
         'status',
+        'zip_code_distance_id'
     ];
 
     public function batchFile()
     {
         return $this->belongsTo(BatchFile::class);
+    }
+
+    public function zipCodeDistance()
+    {
+        return $this->belongsTo(ZipCodeDistance::class);
     }
 }
