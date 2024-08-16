@@ -19,6 +19,10 @@ class BatchFileController extends Controller
 
     public function __construct()
     {
+        if (!defined('SOCKET_EAGAIN')) {
+            define('SOCKET_EAGAIN', 11);
+        }
+
         $this->amqp = new AMQPStreamConnection(
             env('RABBITMQ_HOST'),
             env('RABBITMQ_PORT'),

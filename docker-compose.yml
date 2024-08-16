@@ -25,21 +25,8 @@ services:
     networks:
       - app-network
 
-  php:
-    build:
-      context: ./app
-      dockerfile: Dockerfile
-    container_name: df-app
-    restart: unless-stopped
-    tty: true
-    volumes:
-      - ./app:/app
-      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - app-network
-
   worker:
-    container_name: df-worker
+    # container_name: df-worker
     build:
       context: ./worker-importer
       dockerfile: Dockerfile
@@ -48,9 +35,26 @@ services:
       - amqp
     networks:
       - app-network
+    deploy:
+      replicas: 1
+
+  php:
+    build: ./app
+    container_name: df-app
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./app/docker/php.ini:/usr/local/etc/php/conf.d/local.ini
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+      - amqp
+    networks:
+      - app-network
 
   nginx:
-    image: nginx:alpine
+    build: ./docker/nginx/build
     container_name: df-nginx
     restart: unless-stopped
     tty: true
@@ -58,10 +62,32 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./app:/app
+      - ./app:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
     networks:
       - app-network
+    depends_on:
+      - php
+
+  # elk:
+  #   image: sebp/elk
+  #   container_name: df-elk
+  #   ports:
+  #     - 5601:5601
+  #     - 9200:9200
+  #     - 5044:5044
+  #   networks:
+  #     - app-network
+  
+  # apm-server:
+  #   image: docker.elastic.co/apm/apm-server:8.15.0
+  #   container_name: df-apm
+  #   volumes:
+  #     - ./docker/apm/apm-server.yml:/usr/share/apm-server/apm-server.yml
+  #   ports:
+  #     - 8200:8200
+  #   networks:
+  #     - app-network
 
 networks:
   app-network:

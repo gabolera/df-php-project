@@ -30,7 +30,7 @@ interface Distance {
     to_zip_code: ZipCode;
 }
 
-export default function Dashboard({
+export default function List({
     auth,
     zipCodeDistances,
 }: PageProps<{ zipCodeDistances: Distance[] }>) {
