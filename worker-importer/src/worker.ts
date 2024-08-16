@@ -53,7 +53,7 @@ async function calculateJob(
   const zipCodeFrom = await zipCodeService.findOrCreateZipCode(cepFrom);
   const zipCodeTo = await zipCodeService.findOrCreateZipCode(cepTo);
 
-  if (!zipCodeFrom.id || !zipCodeTo.id) {
+  if (!zipCodeFrom?.id || !zipCodeTo?.id) {
     throw new Error("CEP não encontrado");
   }
 
