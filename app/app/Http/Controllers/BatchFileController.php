@@ -24,14 +24,17 @@ class BatchFileController extends Controller
             define('SOCKET_EAGAIN', 11);
         }
 
-        $this->amqp = new AMQPStreamConnection(
-            env('RABBITMQ_HOST'),
-            env('RABBITMQ_PORT'),
-            env('RABBITMQ_USER'),
-            env('RABBITMQ_PASSWORD'),
-            env('RABBITMQ_VHOST')
-        );
+        $host = env('RABBITMQ_HOST', 'amqp');
+        $port = env('RABBITMQ_PORT', 5672);
+        $user = env('RABBITMQ_USER', 'rabbitmq');
+        $password = env('RABBITMQ_PASSWORD', 'rabbitmq');
+        $vhost = env('RABBITMQ_VHOST', '/');
 
+        if (empty($host) || empty($port) || empty($user) || empty($password) || empty($vhost)) {
+            throw new \Exception('RabbitMQ connection parameters are not properly set.');
+        }
+
+        $this->amqp = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
         $this->channel = $this->amqp->channel();
         $this->channel->queue_declare('batch_file', false, true, false, false);
     }
@@ -129,5 +132,4 @@ class BatchFileController extends Controller
             'batch' => $sanitizedBatch,
         ]);
     }
-
 }
