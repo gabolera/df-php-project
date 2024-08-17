@@ -47,8 +47,10 @@ Primeiro vamos realizar o build do frontend para poder compartilhar entre PHP e 
 docker compose -f docker-compose-build.yml up --build
 ```
 
-`Aguarde o seu terminal liberar, esse processo pode demorar alguns minutos`
+> [!WARNING]  
+> Aguarde o seu terminal liberar, esse processo pode demorar alguns minutos. (Lembrando que o build precisa ser feito apenas uma vez, a não ser que você altere algo no frontend)
 
+<br/>
 
 Agora que temos o build pronto vamos subir o projeto.
 
