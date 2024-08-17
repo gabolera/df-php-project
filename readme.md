@@ -35,7 +35,6 @@ Abaixo eu apresento os requisitos e como foi o pensamento durante o desenvolvime
 - [Requisitos](docs/requisitos.md)
 - [Como foi pensado](docs/como-foi-pensado.md)
 
-
 ---
 
 ## 📦 Instalação
