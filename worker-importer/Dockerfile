@@ -9,7 +9,6 @@ RUN npm install -g pm2
 RUN npm install
 
 COPY . .
-COPY ./../.env ./.env
 
 COPY ./entrypoint-node.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

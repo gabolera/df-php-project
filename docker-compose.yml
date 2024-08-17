@@ -30,6 +30,8 @@ services:
     build:
       context: ./worker-importer
       dockerfile: Dockerfile
+    volumes:
+      - ./.env:/app/.env
     depends_on:
       - db
       - amqp
@@ -45,6 +47,7 @@ services:
     tty: true
     volumes:
       - ./app/docker/php.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./.env:/var/www/.env
     ports:
       - "9000:9000"
     depends_on:
