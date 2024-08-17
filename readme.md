@@ -1,5 +1,43 @@
-# Olá
+# DFAPP
 
+<div align="center">
+
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-269539?style=for-the-badge&logo=nginx&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Postgres](https://img.shields.io/badge/Postgres-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
+![NodeJS](https://img.shields.io/badge/NodeJS-339933?style=for-the-badge&logo=node.js&logoColor=white)
+
+
+</div>
+
+---
+
+# 🗂️ Índice
+
+1. [Objetivos do projeto](#-objetivos)
+2. [Instalação](#-instalação)
+3. [Configuração](#%EF%B8%8F-configuração-opcional)
+4. [Tecnologias](#-tecnologias)
+5. [RabbitMQ](#-rabbitmq)
+6. [Postgres](#-postgres)
+7. [Licença](#-licença)
+8. [Autor](#%EF%B8%8F-autor)
+
+---
+
+## 📋 Objetivos
+- [Requisitos](docs/requisitos.md)
+- [Como foi pensado](docs/como-foi-pensado.md)
+
+
+## 📦 Instalação
+
+Primeiramente configure o arquivo `.env` com as informações do seu banco de dados. OU renomeie o `.env.example` de exemplo para `.env` e configure as informações do banco de dados caso necessário. (ou deixe padrão para subir o projeto com as configurações padrão)
+
+Primeiro vamos realizar o build do
 
 ## 📦 Instalação
 
@@ -20,7 +58,8 @@ Agora que temos o build pronto vamos subir o projeto.
 docker compose up -d --build
 ```
 
-Basta acessar [http://localhost](http://localhost) para visualizar a aplicação.
+Basta acessar [http://localhost](http://localhost) para visualizar a aplicação ou [http://app.dfapp.local](http://app.dfapp.local) se você configurar os DNS como está descrito abaixo.
+
 
 
 ## 🛠️ Configuração (Opcional)
@@ -67,9 +106,10 @@ database: postgres
 
 ## 📝 Licença
 
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## ✒️ Autor
 
-[Gabriel Andreazza](https://www.linkedin.com/in/gabriel-andreazza/)
+[Gabriel Andreazza](https://github.com/gabolera)
 
-[Site](https://andreazza.dev) [Linkedin](https://www.linkedin.com/in/gabriel-andreazza/)
+[Site](https://andreazza.dev) | [GitHub](https://github.com/gabolera) | [Linkedin](https://www.linkedin.com/in/gabriel-andreazza/)
