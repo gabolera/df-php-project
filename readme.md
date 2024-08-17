@@ -3,7 +3,7 @@
 
 ## 📦 Instalação
 
-Primeiramente configure o arquivo `.env` com as informações do seu banco de dados. OU renomeie o `.env.example` de exemplo para `.env` e configure as informações do banco de dados.
+Primeiramente configure o arquivo `.env` com as informações do seu banco de dados. OU renomeie o `.env.example` de exemplo para `.env` e configure as informações do banco de dados caso necessário. (ou deixe padrão para subir o projeto com as configurações padrão)
 
 ```bash 
 docker compose -f docker-compose-build.yml up --build && docker compose up -d --build

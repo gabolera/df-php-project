@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN docker-php-ext-install pdo_pgsql mbstring zip exif pcntl bcmath
+RUN docker-php-ext-install pdo_pgsql mbstring zip exif pcntl bcmath sockets
 # RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -30,7 +30,7 @@ COPY docker/index.php /var/www/public/index.php
 RUN COMPOSER_VENDOR_DIR="/var/vendor" composer install
 RUN chmod -R 777 /var/www/storage
 
-COPY entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 9000
