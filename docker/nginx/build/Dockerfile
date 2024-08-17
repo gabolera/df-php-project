@@ -15,7 +15,7 @@ RUN rm -f /var/log/nginx/access.log && rm -f /var/log/nginx/error.log
 # COPY --chmod=go-w nginx-filebeat.yml /etc/filebeat/modules.d/nginx.yml
 # COPY --chmod=go-w nginx-metricbeat.yml /etc/metricbeat/modules.d/nginx.yml
 
-COPY entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
