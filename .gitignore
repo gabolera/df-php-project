@@ -1,1 +1,2 @@
 docker/storage/database/*.sqlite
+.env

@@ -13,7 +13,6 @@ export class ZipCodeRepository {
   async create(zipCode: ZipCodeProps): Promise<ZipCodeProps> {
     const zip = await db("zip_codes")
       .insert({
-        // id: randomUUID(),
         cep: zipCode.cep,
         state: zipCode.state,
         city: zipCode.city,
@@ -24,9 +23,15 @@ export class ZipCodeRepository {
         updated_at: db.fn.now(),
       })
       .onConflict('cep')
-      .ignore()
+      .merge({
+        state: zipCode.state,
+        city: zipCode.city,
+        neighborhood: zipCode.neighborhood,
+        street: zipCode.street,
+        coordinates: zipCode.coordinates ?? null,
+        updated_at: db.fn.now(),
+      })
       .returning("id");
-
     return { ...zipCode, id: zip[0].id };
   }
 }
