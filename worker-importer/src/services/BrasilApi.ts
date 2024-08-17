@@ -2,7 +2,7 @@ import axios from "axios";
 import { ZipCodeProps } from "../entities/ZipCode";
 
 export class BrasilApi {
-  async getCep(cep: string): Promise<Omit<ZipCodeProps, 'id'>> {
+  async getCep(cep: string, retries = 0): Promise<Omit<ZipCodeProps, 'id'>> {
     try{
       const data = await axios.request({
         method: "GET",
@@ -22,6 +22,11 @@ export class BrasilApi {
     }catch(err: any){
       if(err.response?.status === 404){
         throw new Error('CEP not found');
+      }
+
+      if (retries < 3 && err.response?.status === 429) {
+        await new Promise((resolve) => setTimeout(resolve, 10000 * retries));
+        return this.getCep(cep, retries + 1);
       }
 
       throw err;  

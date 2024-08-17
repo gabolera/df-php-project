@@ -6,39 +6,14 @@ use App\Enums\BatchFileStatusEnum;
 use App\Helpers\SanitizeData;
 use App\Models\BatchFile;
 use App\Models\BatchFileItem;
+use App\Services\RabbitMQ;
 use App\Services\ZipCodeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 
 class BatchFileController extends Controller
 {
-    private $amqp;
-    private $channel;
-
-    public function __construct()
-    {
-        if (!defined('SOCKET_EAGAIN')) {
-            define('SOCKET_EAGAIN', 11);
-        }
-
-        $host = env('RABBITMQ_HOST', 'amqp');
-        $port = env('RABBITMQ_PORT', 5672);
-        $user = env('RABBITMQ_USER', 'rabbitmq');
-        $password = env('RABBITMQ_PASSWORD', 'rabbitmq');
-        $vhost = env('RABBITMQ_VHOST', '/');
-
-        if (empty($host) || empty($port) || empty($user) || empty($password) || empty($vhost)) {
-            throw new \Exception('RabbitMQ connection parameters are not properly set.');
-        }
-
-        $this->amqp = new AMQPStreamConnection($host, $port, $user, $password, $vhost);
-        $this->channel = $this->amqp->channel();
-        $this->channel->queue_declare('batch_file', false, true, false, false);
-    }
-
     public function create()
     {
         return Inertia::render('BatchFile/Index');
@@ -49,6 +24,7 @@ class BatchFileController extends Controller
         $request->validate([
             'file' => 'required|mimes:csv,txt',
         ]);
+        $amqp = new RabbitMQ();
         $errors = [];
         $file = $request->file('file');
         $csv = file($file->getRealPath());
@@ -90,19 +66,13 @@ class BatchFileController extends Controller
                 'status' => BatchFileStatusEnum::Pending->value,
             ]);
 
-            $this->channel->basic_publish(
-                new AMQPMessage(json_encode([
-                    'batch_file_id' => $batchId->id,
-                    'zip_code_from' => $data[0],
-                    'zip_code_to' => $data[1],
-                ])),
-                '',
-                'batch_file'
-            );
-        }
+            $amqp->publish(json_encode([
+                'batch_file_id' => $batchId->id,
+                'zip_code_from' => $data[0],
+                'zip_code_to' => $data[1],
+            ]), 'batch_file');
 
-        $this->channel->close();
-        $this->amqp->close();
+        }
 
         return redirect()->route('batch.show', ['id' => $batchId]);
     }
