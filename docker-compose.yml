@@ -43,7 +43,6 @@ services:
   php:
     build: ./app
     container_name: df-app
-    restart: unless-stopped
     tty: true
     volumes:
       - ./app/docker/php.ini:/usr/local/etc/php/conf.d/local.ini
@@ -59,7 +58,6 @@ services:
   nginx:
     build: ./docker/nginx/build
     container_name: df-nginx
-    restart: unless-stopped
     tty: true
     ports:
       - "80:80"

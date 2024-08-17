@@ -49,11 +49,19 @@ Se estiver utilizando windows vá até `c:\windows\system32\drivers\etc` abra o 
 
 ## 🐰 RabbitMQ
 
-Para acessar o RabbitMQ basta acessar [http://amqp.dfapp.local](http://amqp.dfapp.local) com as credenciais abaixo.
+Para acessar o RabbitMQ basta acessar [http://amqp.dfapp.local](http://amqp.dfapp.local) ou [http://localhost:15672](http://localhost:15672) com as credenciais abaixo.
 
 ```text
 usuario: rabbitmq
 senha: rabbitmq
+```
+
+## 📅 Postgres
+
+```text
+usuario: postgres
+senha: postgres
+database: postgres
 ```
 
 
