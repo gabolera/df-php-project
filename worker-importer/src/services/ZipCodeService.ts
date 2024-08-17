@@ -13,8 +13,8 @@ export class ZipCodeService {
 
     const brasilApi = new BrasilApi();
     const zipCodeBrasilApi = await brasilApi.getCep(zipCode);
-    const zipIp = await repo.create(zipCodeBrasilApi);
-    return {...zipCodeBrasilApi, id: zipIp.id};
+    const zipCreatedDatabase = await repo.create(zipCodeBrasilApi);
+    return {...zipCodeBrasilApi, id: zipCreatedDatabase.id};
   }
 
   calculateDistanceByCoordinates(
