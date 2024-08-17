@@ -1,6 +1,4 @@
 import db from "../database/KnexDriverDatabase";
-import { ZipCode } from "../entities/ZipCode";
-import { randomUUID } from 'crypto';
 
 export class ZipCodeDistanceRepository {
   async hasCalculatedDistance(

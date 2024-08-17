@@ -25,6 +25,7 @@ RUN docker-php-ext-install pdo_pgsql mbstring zip exif pcntl bcmath sockets
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY . /var/www
+COPY ./../.env /var/www/.env
 COPY docker/artisan /var/www/artisan
 COPY docker/index.php /var/www/public/index.php
 RUN COMPOSER_VENDOR_DIR="/var/vendor" composer install

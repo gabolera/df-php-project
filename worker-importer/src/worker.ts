@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { ZipCodeDistanceRepository } from "./repositories/ZipCodeDistanceRepository";
 import { ZipCodeService } from "./services/ZipCodeService";
 import { BatchFileRepository } from "./repositories/BatchFileRepository";
@@ -82,11 +83,11 @@ async function calculateJob(
 
 async function run() {
   const rabbitmq = await amqp.connect({
-    hostname: "amqp",
-    port: 5672,
-    username: "rabbitmq",
-    password: "rabbitmq",
-    vhost: "/",
+    hostname: process.env.RABBITMQ_HOST,
+    port: Number(process.env.RABBITMQ_PORT),
+    username: process.env.RABBITMQ_USER,
+    password: process.env.RABBITMQ_PASSWORD,
+    vhost: process.env.RABBITMQ_VHOST,
   });
 
   const channel = await rabbitmq.createChannel();
