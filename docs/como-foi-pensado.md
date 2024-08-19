@@ -23,6 +23,11 @@ Para o banco de dados, foi utilizado o **Postgres**.
 Para o servidor web, foi utilizado o **Nginx** integrado com **PHP-FPM**.
 
 
+### 🪶 Adicionais
+
+Foi construido um "Builder" para o projeto, visando facilitar a execução de comandos e a instalação de dependências. Pois o compartilhamento direto do volume entre NGINX e PHP-FPM via docker causa problema de lentidão e performace. Por isso foi optado por realizar o build e dentro da imagem do PHP-FPM realizar a cópia dos arquivos construidos pelo Builder.
+
+
 ### 📦 Estrutura de pastas
 
 - **docker**: Contém os arquivos de configuração do Builder e do Nginx
